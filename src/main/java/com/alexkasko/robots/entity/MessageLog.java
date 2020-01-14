@@ -78,6 +78,6 @@ public class MessageLog {
 
     @Override
     public String toString() {
-        return "Employee{" + "id=" + id + ", time='" + time + "', message='" + message + "'}";
+        return "MessageLog{" + "id=" + id + ", time='" + time + "', message='" + message + "'}";
     }
 }

@@ -10,8 +10,11 @@ import java.util.List;
 @Service
 public class MessageLogServiceImpl implements MessageLogService {
 
-    @Autowired
-    public MessageLogDao messageLogDao;
+    public final MessageLogDao messageLogDao;
+
+    public MessageLogServiceImpl(MessageLogDao messageLogDao) {
+        this.messageLogDao = messageLogDao;
+    }
 
     @Override
     public List<MessageLog> findAll() {

@@ -54,4 +54,23 @@ public abstract class Robot {
         this.state = ERobotState.IDLE;
         messageLogService.save("-- " + this.name + " end task --");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Robot other = (Robot) obj;
+        if (name == null) {
+            if (other.name != null) return false;
+        } else if (!name.equals(other.name)) return false;
+        if (speed != other.speed) return false;
+        if (state == null) {
+            if (other.state != null) return false;
+        } else if (!state.equals(other.state)) return false;
+        if (getType() == null) {
+            if (other.getType() != null) return false;
+        } else if (!getType().equals(other.getType())) return false;
+        return true;
+    }
 }

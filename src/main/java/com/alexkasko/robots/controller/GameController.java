@@ -6,9 +6,9 @@ import com.alexkasko.robots.service.ActivityTracker;
 import com.alexkasko.robots.service.ActivityTrackerRunner;
 import com.alexkasko.robots.service.MessageLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
@@ -21,14 +21,17 @@ public class GameController {
     private final ActivityTracker activityTracker;
     private final ActivityTrackerRunner activityTrackerRunner;
     private final MessageLogService messageLogService;
+    private final TaskExecutor taskExecutor;
 
     @Autowired
     public GameController(ActivityTracker activityTracker,
                           ActivityTrackerRunner activityTrackerRunner,
-                          MessageLogService messageLogService) {
+                          MessageLogService messageLogService,
+                          TaskExecutor threadPoolTaskExecutor) {
         this.activityTrackerRunner = activityTrackerRunner;
         this.messageLogService = messageLogService;
         this.activityTracker = activityTracker;
+        this.taskExecutor = threadPoolTaskExecutor;
     }
 
     @GetMapping("/log")
@@ -40,8 +43,8 @@ public class GameController {
     public @ResponseBody ResponseEntity<String> addTask(@Valid @RequestBody Task task) {
         if(activityTracker.addTask(task)) {
             if (!activityTracker.getIsRunning())
-                activityTrackerRunner.run();
-            return new ResponseEntity<String>("ok", HttpStatus.OK);
+                taskExecutor.execute(activityTrackerRunner);
+            return new ResponseEntity<String>("ok", HttpStatus.CREATED);
         }
         return new ResponseEntity<String>("error", HttpStatus.BAD_REQUEST);
     }

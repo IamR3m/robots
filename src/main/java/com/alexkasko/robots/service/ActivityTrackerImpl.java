@@ -96,7 +96,7 @@ public class ActivityTrackerImpl implements ActivityTracker {
     }
 
     @Override
-    public void checkRobotsExist() {
+    public void checkRobots() {
         HashMap<ERobotType, Integer> robotTypeCount = new HashMap<ERobotType, Integer>();
         HashMap<ERobotType, Integer> taskRobotTypeCount = new HashMap<ERobotType, Integer>();
         List<Robot> destroyedRobots = new ArrayList<>();
@@ -164,8 +164,6 @@ public class ActivityTrackerImpl implements ActivityTracker {
 
     @Override
     public boolean addTask(Task task) {
-        if (task.getRobotType().equals(ERobotType.COMMON))
-            return false;
         queue.add(task);
         messageLogService.save("Activity Tracker: Task has been added");
         return true;
@@ -184,5 +182,15 @@ public class ActivityTrackerImpl implements ActivityTracker {
     @Override
     public void setIsRunning(boolean isRunning) {
         this.isRunning = isRunning;
+    }
+
+    @Override
+    public List<Robot> getRobots() {
+        return this.robots;
+    }
+
+    @Override
+    public ArrayDeque<Task> getQueue() {
+        return this.queue;
     }
 }

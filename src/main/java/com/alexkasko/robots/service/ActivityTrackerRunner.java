@@ -1,7 +1,5 @@
 package com.alexkasko.robots.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +21,7 @@ public class ActivityTrackerRunner implements Runnable {
     public void run() {
         activityTracker.setIsRunning(true);
         while (activityTracker.checkQueue()) {
-            activityTracker.checkRobotsExist();
+            activityTracker.checkRobots();
             try {
                 activityTracker.runNextTask();
                 TimeUnit.SECONDS.sleep(5);

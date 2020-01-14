@@ -1,9 +1,11 @@
 package com.alexkasko.robots.service;
 
 import com.alexkasko.robots.entity.MessageLog;
+import com.alexkasko.robots.entity.Robot;
 import com.alexkasko.robots.entity.Task;
 import com.alexkasko.robots.entity.enums.ERobotType;
 
+import java.util.ArrayDeque;
 import java.util.List;
 
 public interface ActivityTracker {
@@ -20,8 +22,8 @@ public interface ActivityTracker {
     // создать робота определенного типа
     void createRobot(ERobotType robotType);
 
-    // проверить наличие роботов
-    void checkRobotsExist();
+    // проверить наличие необходимых роботов
+    void checkRobots();
 
     // проверить очередь
     boolean checkQueue();
@@ -38,4 +40,8 @@ public interface ActivityTracker {
     boolean getIsRunning();
 
     void setIsRunning(boolean isRunning);
+
+    List<Robot> getRobots();
+
+    ArrayDeque<Task> getQueue();
 }

@@ -1,13 +1,9 @@
 package com.alexkasko.robots.controller;
 
-import com.alexkasko.robots.config.ThreadConfig;
-import com.alexkasko.robots.config.WebAppInitializer;
 import com.alexkasko.robots.config.WebConfig;
 import com.alexkasko.robots.entity.MessageLog;
 import com.alexkasko.robots.entity.Task;
-import com.alexkasko.robots.service.ActivityTracker;
-import com.alexkasko.robots.service.ActivityTrackerRunner;
-import com.alexkasko.robots.service.MessageLogService;
+import com.alexkasko.robots.service.RestService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,29 +25,17 @@ import static org.junit.Assert.*;
 public class GameControllerTest {
 
     @Autowired
-    ActivityTracker activityTracker;
-
-    @Autowired
-    ActivityTrackerRunner activityTrackerRunner;
-
-    @Autowired
-    MessageLogService messageLogService;
-
-    @Autowired
-    ThreadConfig threadConfig;
+    RestService restService;
 
     private GameController gameController;
 
     @Before
     public void setUp() throws Exception {
-        this.gameController = new GameController(activityTracker,
-                activityTrackerRunner,
-                messageLogService,
-                threadConfig.threadPoolTaskExecutor());
+        this.gameController = new GameController(restService);
     }
 
     @Test
-    public void readLog() {
+    public void readLogReturnsNonEmptyList() {
         List<MessageLog> messageLogs = gameController.readLog();
         assertFalse(messageLogs.isEmpty());
     }

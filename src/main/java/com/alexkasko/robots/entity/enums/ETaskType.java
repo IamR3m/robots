@@ -13,7 +13,7 @@ public enum ETaskType {
     @JsonProperty("Self Destroy")
     SELF_DESTROY("Self Destroy");
 
-    private String title;
+    private final String title;
     private static final List<ETaskType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
 

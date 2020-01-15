@@ -5,7 +5,7 @@ public enum ERobotState {
     WORKING("Working"),
     DESTROYED("Destroyed");
 
-    private String title;
+    private final String title;
 
     ERobotState(String title) {
         this.title = title;

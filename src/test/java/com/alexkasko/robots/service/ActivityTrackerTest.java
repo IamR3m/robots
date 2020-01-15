@@ -34,14 +34,12 @@ public class ActivityTrackerTest {
         activityTracker = new ActivityTrackerImpl(messageLogService);
     }
 
-    // Проверка создания очереди. Очередь не должна быть пуста
     @Test
     public void prepareQueue() {
         activityTracker.prepareQueue();
         assertNotNull(activityTracker.getQueue());
     }
 
-    // Проверка создания роботов. Должны быть созданы роботы 4-х типов
     @Test
     public void prepareRobots() {
         List<Robot> robots = new ArrayList<>();
@@ -53,14 +51,12 @@ public class ActivityTrackerTest {
         assertEquals(robots, activityTracker.getRobots());
     }
 
-    // Проверка создания случайного робота
     @Test
     public void createRobotDefault() {
         activityTracker.createRobot();
         assertEquals(1,activityTracker.getRobots().size());
     }
 
-    // Проверка создания робота определенного типа
     @Test
     public void createRobot() {
         activityTracker.createRobot(ERobotType.AUTOBOT);
@@ -74,7 +70,6 @@ public class ActivityTrackerTest {
         assertTrue(robots.get(3).getName().contains("T1000"));
     }
 
-    // Робот типа COMMON не может быть создан
     @Test(expected = RuntimeException.class)
     public void createRobotFail() {
         activityTracker.createRobot(ERobotType.COMMON);
@@ -104,12 +99,9 @@ public class ActivityTrackerTest {
         assertTrue(robots.get(3).getName().contains("R2D2"));
     }
 
-    // Проверка метода проверки очереди
     @Test
     public void checkQueue() {
-        // Пустая очередь должна вернуть False
         assertFalse(activityTracker.checkQueue());
-        // Заполненная очередь должна вернуть True
         activityTracker.prepareQueue();
         assertTrue(activityTracker.checkQueue());
     }
@@ -131,16 +123,12 @@ public class ActivityTrackerTest {
 
     }
 
-    // Проверка добавления задачи
     @Test
     public void addTask() {
-        // Успешное добавление задачи возвращает True
         assertTrue(activityTracker.addTask(new Task()));
-        // И размер очереди будет 1
         assertEquals(1,activityTracker.getQueue().size());
     }
 
-    // Проверка получения лога
     @Test
     public void getMessageLog() {
         activityTracker.prepareQueue();

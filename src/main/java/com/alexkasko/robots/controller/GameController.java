@@ -2,11 +2,8 @@ package com.alexkasko.robots.controller;
 
 import com.alexkasko.robots.entity.MessageLog;
 import com.alexkasko.robots.entity.Task;
-import com.alexkasko.robots.service.ActivityTracker;
-import com.alexkasko.robots.service.ActivityTrackerRunner;
-import com.alexkasko.robots.service.MessageLogService;
+import com.alexkasko.robots.service.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,32 +15,21 @@ import java.util.List;
 @RequestMapping("/api")
 public class GameController {
 
-    private final ActivityTracker activityTracker;
-    private final ActivityTrackerRunner activityTrackerRunner;
-    private final MessageLogService messageLogService;
-    private final TaskExecutor taskExecutor;
+    private final RestService restService;
 
     @Autowired
-    public GameController(ActivityTracker activityTracker,
-                          ActivityTrackerRunner activityTrackerRunner,
-                          MessageLogService messageLogService,
-                          TaskExecutor threadPoolTaskExecutor) {
-        this.activityTrackerRunner = activityTrackerRunner;
-        this.messageLogService = messageLogService;
-        this.activityTracker = activityTracker;
-        this.taskExecutor = threadPoolTaskExecutor;
+    public GameController(RestService restService) {
+        this.restService = restService;
     }
 
     @GetMapping("/log")
     public @ResponseBody List<MessageLog> readLog() {
-        return messageLogService.findAll();
+        return restService.readLog();
     }
 
     @PostMapping("/task")
     public @ResponseBody ResponseEntity<String> addTask(@Valid @RequestBody Task task) {
-        if(activityTracker.addTask(task)) {
-            if (!activityTracker.getIsRunning())
-                taskExecutor.execute(activityTrackerRunner);
+        if(restService.addTask(task)) {
             return new ResponseEntity<String>("ok", HttpStatus.CREATED);
         }
         return new ResponseEntity<String>("error", HttpStatus.BAD_REQUEST);

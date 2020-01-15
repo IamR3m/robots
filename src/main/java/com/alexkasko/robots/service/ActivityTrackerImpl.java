@@ -43,11 +43,12 @@ public class ActivityTrackerImpl implements ActivityTracker {
     public void prepareQueue() {
         // Создание случайного количества (от 10 до 50) случайных задач.
         int taskCount = ThreadLocalRandom.current().nextInt(TASK_COUNT_MIN, TASK_COUNT_MAX);
-        for (int i = 0; i < taskCount; i++)
+        for (int i = 0; i < taskCount; i++) {
             // Конструктор задачи по умолчанию создает случайную задачу
             this.queue.add(new Task(ERobotType.randomType(),
                     ThreadLocalRandom.current().nextInt(ESTIMATE_MIN, ESTIMATE_MAX),
                     ETaskType.randomType()));
+        }
         messageLogService.save("Activity Tracker: " + taskCount + " tasks created and added to queue");
     }
 
@@ -97,8 +98,6 @@ public class ActivityTrackerImpl implements ActivityTracker {
 
     @Override
     public void checkRobots() {
-        HashMap<ERobotType, Integer> robotTypeCount = new HashMap<ERobotType, Integer>();
-        HashMap<ERobotType, Integer> taskRobotTypeCount = new HashMap<ERobotType, Integer>();
         List<Robot> destroyedRobots = new ArrayList<>();
 
         // Проверка наличия свободных роботов каждого типа
@@ -109,8 +108,9 @@ public class ActivityTrackerImpl implements ActivityTracker {
 
             for (Robot robot : robots) {
                 // Если находим убитого робота - пополняем список убитых роботов
-                if (robot.getState() == ERobotState.DESTROYED)
+                if (robot.getState() == ERobotState.DESTROYED) {
                     destroyedRobots.add(robot);
+                }
                 // Если робот соответствующего типа имеет статус IDLE, то искомый робот найден
                 if (robot.getType().equals(robotType) && robot.getState().equals(ERobotState.IDLE)) {
                     exist = true;
@@ -144,7 +144,7 @@ public class ActivityTrackerImpl implements ActivityTracker {
             // Извлекаем задачу из очереди
             Task task = queue.pop();
             // Ищем подходящего робота
-            for (Robot robot : robots)
+            for (Robot robot : robots) {
                 // Если робот свободен и тип робота задачи - COMMON или совпадает с типом робота
                 if (robot.getState().equals(ERobotState.IDLE) && (task.getRobotType().equals(ERobotType.COMMON) ||
                         robot.getType().equals(task.getRobotType()))) {
@@ -153,12 +153,14 @@ public class ActivityTrackerImpl implements ActivityTracker {
                     task = null;
                     break;
                 }
+            }
             /*
             * Если задача не пуста (не найден свободный робот) то возвращаем задачу в начало очереди.
             * В следующей итерации в ActivityTrackerRunner.cycleRun() будет добавлен необходимый робот
             * */
-            if (task != null)
+            if (task != null) {
                 queue.addFirst(task);
+            }
         }
     }
 

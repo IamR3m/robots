@@ -19,7 +19,7 @@ public enum ERobotType {
     @JsonProperty("Common")
     COMMON("Common");
 
-    private String title;
+    private final String title;
     private static final List<ERobotType> VALUES = Collections.unmodifiableList(Arrays.asList(AUTOBOT,R2D2,NS5,T1000));
     private static final int SIZE = VALUES.size();
 

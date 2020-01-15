@@ -1,5 +1,6 @@
 package com.alexkasko.robots.service;
 
+import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,9 @@ import java.util.concurrent.TimeUnit;
 @EnableAsync
 public class ActivityTrackerRunner implements Runnable {
 
+    private Logger logger;
     private final ActivityTracker activityTracker;
+    private final int SLEEP_TIME = 5;
 
     public ActivityTrackerRunner(ActivityTracker activityTracker) {
         this.activityTracker = activityTracker;
@@ -24,9 +27,10 @@ public class ActivityTrackerRunner implements Runnable {
             activityTracker.checkRobots();
             try {
                 activityTracker.runNextTask();
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(SLEEP_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                logger.error("Interrupted while sleeping", e);
             }
         }
         activityTracker.setIsRunning(false);
